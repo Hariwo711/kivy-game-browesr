@@ -1,6 +1,10 @@
-#:kivy 1.0.9
+Manager:
+    Menu:
+        name:'menu'
+    Game:
+        name:'game'
 
-<ScreenOne>:
+<Menu>:
     BoxLayout:
         Button:
             text: "Football Game"
@@ -10,15 +14,14 @@
                 # and the direction of the slide
                 root.manager.transition.direction = 'left'
                 root.manager.transition.duration = 1
-                root.manager.current = 'football_game'
+                root.manager.current = 'game'
         Button:
             text: "Snake Game"
             background_color : 1, 1, 0, 1
             on_press:
                 root.manager.transition.direction = 'left'
                 root.manager.transition.duration = 1
-                root.manager.current = 'Snake_game'
-  
+                root.manager.current = 'screen_three'
 
 
 <SoccerBall>:
@@ -26,24 +29,24 @@
     canvas:
         Ellipse:
             source: 'football.png'
-            pos: self.pos
+            pos: 50,50
             size: self.size          
 
 <SoccerPlayer>:
-    size: 150, 150
+    size: 50, 50
     src: 'assets/player2run.png'
     anim_delay: 0.1
     canvas.before:
         Rectangle:
             pos:self.pos
-            size:self.size
+            size:50,50
             source:self.src
 
-<SoccerGame>:
+<Game>:
     ball: soccer_ball
     player1: player_left
     player2: player_right
-    
+    allow_stretch:True
     canvas:
         Rectangle:
             pos: self.center_x-5, 0
@@ -90,8 +93,3 @@
         x: root.width/3
         center_y: root.center_y
         center_x: root.center_x
-
-<Footballscreen>:
-    game_engine: soccergame_widget_id
-    SoccerGame:
-        id: soccergame_widget_id

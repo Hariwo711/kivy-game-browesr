@@ -3,7 +3,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
-
+from kivy.core.audio import SoundLoader
 import random
 from tkinter import Button
 from kivy.app import App
@@ -12,27 +12,12 @@ from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Rectangle
+from kivy.uix.image import Image
 
-# kv = Builder.load_file("screen.kv")
-kv = Builder.load_file("screen.kv")
-kv2 = Builder.load_file("football.kv")
-
-class ScreenOne(Screen):
+class Manager(ScreenManager):
     pass
-  
-
-# class ScreenTwo(Screen):
-#     pass
- 
-# class ScreenThree(Screen):
-#     pass
- 
-# class ScreenFour(Screen):
-#     pass
- 
-# class ScreenFive(Screen):
-#     pass
-
+class Menu(Screen):
+    pass
 
 
 class SoccerPlayer(Widget):
@@ -60,19 +45,24 @@ class SoccerBall(Widget):
         self.pos = Vector(*self.velocity) + self.pos
 spd = 20
 
-class SoccerGame(Widget):
+
+
+class Game(Screen):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        super(SoccerGame, self).__init__(**kwargs)
+        super(Game, self).__init__(**kwargs)
         self.keybord = Window.request_keyboard(self._on_keyboard_closed, self)
         self.keybord.bind(on_key_down=self._on_key_down)
         self.keybord.bind(on_key_up=self._on_key_up)
         self.pressed_keys = set()
+        
+    
+    def on_enter(self, *args):
         Clock.schedule_interval(self.move_step, 0)
-        # Clock.schedule_interval(self.new_test, 0)
+
 
     def _on_keyboard_closed(self):
         self.keybord.unbind(on_key_down=self._on_key_down)
@@ -179,124 +169,11 @@ class SoccerGame(Widget):
     
     def start(self):
         self.update(1/ 60)
-class Footballscreen(Screen):
-    game_engine = ObjectProperty(None)
 
-    def on_enter(self):
-        # we screen comes into view, start the game   
-        self.game_engine.start()
+class Player(Image):
+    pass
 
+class SnakeGame(App):
+    pass
 
-
-
-
-
-
-
-
-
-def collides(rect1,rect2):
-    r1x = rect1[0][0]
-    r1y = rect1[0][1]
-    r2x = rect2[0][0]
-    r2y = rect2[0][1]
-    r1w = rect1[1][0]
-    r1h = rect1[1][1]
-    r2w = rect2[1][0]
-    r2h = rect2[1][1]
-
-    if(r1x < r2x + r2w and r1x + r1w > r2x and r1y < r2y + r2h and r1y +r1h > r2y):
-        return True
-    else:
-        return False
-class Game(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-    def _on_keyboard_closed(self):
-        self._keyboard.unbind(on_key_down=self._on_key_down)
-        self._keyboard.unbind(on_key_up=self._on_key_up)
-        self._keyboard = None
-
-    def _on_key_down(self, keyboard, keycode, text, modifilers):
-        print('down', text)
-        self.pressed_keys.add(text)
-    
-    def _on_key_up(self, keyboard, keycode):
-        text = keycode[1]
-        print('up', text)
-
-        if text in self.pressed_keys:
-            self.pressed_keys.remove(text)
-    
-    def move_step(self, dt):
-        cur_x = self.hero.pos[0]
-        cur_y = self.hero.pos[1]
-
-        step = 150 * dt
-
-        if 'w' in self.pressed_keys:
-            cur_y += step
-        if 's' in self.pressed_keys:
-            cur_y -= step
-        if 'a' in self.pressed_keys:
-            cur_x -= step
-        if 'd' in self.pressed_keys:
-            cur_x += step
-
-        self.hero.pos = (cur_x, cur_y)   
-
-        if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
-            print("colliding!")
-        else:
-            print("not colliding!")
-
-    def on_enter(self, **kwargs):
-
-        self._keyboard = Window.request_keyboard(
-             self._on_keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_key_down)
-        self._keyboard.bind(on_key_up=self._on_key_up)
-
-        self.pressed_keys = set()
-        Clock.schedule_interval(self.move_step, 0)
-
-        with self.canvas:
-            self.hero = Rectangle(source='snake_head.png', pos=(1,2 ), size=(40, 40),)
-            
-            self.enemy = Rectangle(source='fruit.png', pos=(random.randint(50,450), random.randint(50,550)), size=(30, 30))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-screen_manager = ScreenManager()
-screen_manager.add_widget(ScreenOne(name ="screen_one"))
-screen_manager.add_widget(Footballscreen(name = 'football_game'))
-screen_manager.add_widget(Game(name ="Snake_game"))
-# screen_manager.add_widget(ScreenFour(name ="screen_four"))
-# screen_manager.add_widget(ScreenFive(name ="screen_five"))
-# screen_manager.current = 'football_game'
-
-# Create the App class
-# Create the App class
-class ScreenApp(App):
-    def build(self):
-        return screen_manager
-
-
-if __name__ == "__main__":
-    ScreenApp().run()
+SnakeGame().run()
