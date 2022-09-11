@@ -10,7 +10,7 @@
                 # and the direction of the slide
                 root.manager.transition.direction = 'left'
                 root.manager.transition.duration = 1
-                root.manager.current = 'screen_two'
+                root.manager.current = 'football_game'
         Button:
             text: "Snake Game"
             background_color : 1, 1, 0, 1
@@ -19,41 +19,79 @@
                 root.manager.transition.duration = 1
                 root.manager.current = 'screen_three'
   
-<ScreenTwo>:
-    BoxLayout:
-        Button:
-            text: "Go to Screen 3"
-            background_color : 1, 1, 0, 1
-            on_press:
-                root.manager.transition.direction = 'left'
-                root.manager.transition.duration = 1
-                root.manager.current = 'screen_three'
- 
-<ScreenThree>:
-    BoxLayout:
-        Button:
-            text: "Go to Screen 4"
-            background_color : 1, 0, 1, 1
-            on_press:
-                root.manager.transition.direction = 'left'
-                root.manager.transition.duration = 1
-                root.manager.current = 'screen_four'
- 
-<ScreenFour>:
-    BoxLayout:
-        Button:
-            text: "Go to Screen 5"
-            background_color : 0, 1, 1, 1
-            on_press:
-                root.manager.transition.direction = 'left'
-                root.manager.transition.duration = 1
-                root.manager.current = 'screen_five'
- 
-<ScreenFive>:
-    BoxLayout:
-        Button:
-            text: "Go to Screen 1"
-            background_color : 1, 0, 0, 1
-            on_press:
-                root.manager.transition.direction = 'right'
-                root.manager.current = 'screen_one'
+
+
+<SoccerBall>:
+    size: 50, 50 
+    canvas:
+        Ellipse:
+            source: 'football.png'
+            pos: self.pos
+            size: self.size          
+
+<SoccerPlayer>:
+    size: 150, 150
+    src: 'assets/player2run.png'
+    anim_delay: 0.1
+    canvas.before:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source:self.src
+
+<SoccerGame>:
+    ball: soccer_ball
+    player1: player_left
+    player2: player_right
+    
+    canvas:
+        Rectangle:
+            pos: self.center_x-5, 0
+            size: 1, self.height
+    
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'field2.png'
+    
+    Label:
+        font_size: 70  
+        font_name: 'fonts/RobotoCondensed-BoldItalic.ttf'
+        center_x: root.width / 4
+        top: root.top - 50
+        text: str(root.player1.score)
+        
+    Label:
+        font_size: 70  
+        font_name: 'fonts/RobotoCondensed-BoldItalic.ttf'
+        center_x: root.width * 3 / 4
+        top: root.top - 50
+        text: str(root.player2.score)
+    Label:
+        font_size: root.width / 20
+        font_name: 'fonts/CampusPersonalUse-dE27.ttf'
+        center_x: root.center_x
+        top: root.top - (root.height/10)
+        text: 'PUMPS BALL GAME'
+    SoccerBall:
+        id: soccer_ball
+        center: self.parent.center
+        
+    SoccerPlayer:
+        id: player_left
+        x: root.width*3/4
+        center_y: root.center_y
+        center_x: root.center_x
+        
+    SoccerPlayer:
+        id: player_right
+        src: 'assets/player1kick.png'
+        x: root.width/3
+        center_y: root.center_y
+        center_x: root.center_x
+
+<Footballscreen>:
+    game_engine: soccergame_widget_id
+    SoccerGame:
+        id: soccergame_widget_id
