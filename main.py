@@ -64,7 +64,16 @@ class SoccerGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
-
+    def start(self, *args):
+        self.keybord = Window.request_keyboard(self._on_keyboard_closed, self)
+        self.keybord.bind(on_key_down=self._on_key_down)
+        self.keybord.bind(on_key_up=self._on_key_up)
+        self.pressed_keys = set()
+        Clock.schedule_interval(self.move_step, 0)
+        self.serve_ball()
+        self.update(self, *args)
+        Clock.schedule_interval(self.update,1/ 60)
+    
     def __init__(self, **kwargs):
         super(SoccerGame, self).__init__(**kwargs)
 
@@ -130,7 +139,7 @@ class SoccerGame(Widget):
             direction_ball = int(random.choice(randomlist))
             self.ball.center = self.center
             self.ball.velocity = (4 * direction_ball, 0)
-        # print('step, x, y', dt, cur_x, cur_y)
+        print('step, x, y', dt, cur_x, cur_y)
         self.player1.pos = (cur_x, cur_y)
         self.player2.pos = (cur2_x, cur2_y)
         print(cur_x, cur_y, cur2_x, cur2_y)
@@ -140,7 +149,7 @@ class SoccerGame(Widget):
         self.ball.center = self.center
         self.ball.velocity = vel
 
-    def update(self):
+    def update(self, dt):
         self.ball.move()
 
         # bounce of paddles
@@ -172,14 +181,7 @@ class SoccerGame(Widget):
         if self.ball.velocity_y > 5:
             self.ball.velocity_y = 4
         print(self.ball.velocity_y)
-    def start(self, *args):
-        self.keybord = Window.request_keyboard(self._on_keyboard_closed, self)
-        self.keybord.bind(on_key_down=self._on_key_down)
-        self.keybord.bind(on_key_up=self._on_key_up)
-        self.pressed_keys = set()
-        Clock.schedule_interval(self.move_step, 0)
-        self.update()
-        self.serve_ball()
+
 
 class soccerscreen(Screen):
     game_engine = ObjectProperty(None)
