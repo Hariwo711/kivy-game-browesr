@@ -1,0 +1,52 @@
+#:kivy 1.0.9
+
+<ScreenOne>:
+    BoxLayout:
+        Button:
+            text: "Go to Screen 8"
+            background_color : 0, 0, 1, 1
+            on_press:
+                # You can define the duration of the change
+                # and the direction of the slide
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 1
+                root.manager.current = 'screen_five'
+  
+<ScreenTwo>:
+    BoxLayout:
+        Button:
+            text: "Go to Screen 3"
+            background_color : 1, 1, 0, 1
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 1
+                root.manager.current = 'screen_three'
+ 
+<ScreenThree>:
+    BoxLayout:
+        Button:
+            text: "Go to Screen 4"
+            background_color : 1, 0, 1, 1
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 1
+                root.manager.current = 'screen_four'
+ 
+<ScreenFour>:
+    BoxLayout:
+        Button:
+            text: "Go to Screen 5"
+            background_color : 0, 1, 1, 1
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 1
+                root.manager.current = 'screen_five'
+ 
+<ScreenFive>:
+    BoxLayout:
+        Button:
+            text: "Go to Screen 1"
+            background_color : 1, 0, 0, 1
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'screen_one'
