@@ -1,3 +1,5 @@
+from cgitb import text
+from tkinter import Label
 from types import NoneType
 import kivy 
 from kivy.app import App
@@ -6,9 +8,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
 import random
-from tkinter import Button
 from kivy.app import App
-from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
+from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -20,19 +21,6 @@ kv = Builder.load_file("screen.kv")
 class Menu(Screen):
     pass
   
-
-# class ScreenTwo(Screen):
-#     pass
- 
-# class ScreenThree(Screen):
-#     pass
- 
-# class ScreenFour(Screen):
-#     pass
- 
-# class ScreenFive(Screen):
-#     pass
-
 
 
 class SoccerPlayer(Widget):
@@ -46,11 +34,7 @@ class SoccerPlayer(Widget):
             bounced = Vector(-1 * vx, vy)
             vel = bounced * 1.1
             ball.velocity = vel.x, vel.y + offset
-        # if self.collide_widget(ball):
-        #     vx, vy = self.player1.pos
-        #     ball.velocity_x = vx
-
-
+            
 class SoccerBall(Widget):
     velocity_x = NumericProperty(0)
     velocity_y = NumericProperty(0)
@@ -76,8 +60,6 @@ class SoccerGame(Widget):
     
     def __init__(self, **kwargs):
         super(SoccerGame, self).__init__(**kwargs)
-
-        # Clock.schedule_interval(self.new_test, 0)
 
     def _on_keyboard_closed(self):
         self.keybord.unbind(on_key_down=self._on_key_down)
@@ -152,17 +134,18 @@ class SoccerGame(Widget):
     def update(self, dt):
         self.ball.move()
 
-        # bounce of paddles
+        # bounce of players
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
         randomlist = ["1", "-1"]
         direction_ball = int(random.choice(randomlist))
-        # bounce ball off bottom or top
+        
+        # bounce ball off bottom or top of football field
 
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
 
-        # went of to a side to score point?
+        # went of to a opponents goal to score point?
         if self.ball.x < self.x:
             if (self.height*0.26 < self.ball.y) & (self.ball.y < self.height*0.74):
                 self.player2.score += 1
@@ -194,9 +177,10 @@ class soccerscreen(Screen):
 
 
 
+SnakeGamePoints = 0
 
 
-
+#to say if the snake has eaten the fruit
 def collides(rect1,rect2):
     r1x = rect1[0][0]
     r1y = rect1[0][1]
@@ -211,7 +195,8 @@ def collides(rect1,rect2):
         return True
     else:
         return False
-class Game(Screen):
+class SnakeGame(Screen):
+    score = NumericProperty(SnakeGamePoints)
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
     def _on_keyboard_closed(self):
@@ -231,6 +216,7 @@ class Game(Screen):
             self.pressed_keys.remove(text)
     
     def move_step(self, dt):
+        global SnakeGamePoints
         cur_x = self.hero.pos[0]
         cur_y = self.hero.pos[1]
 
@@ -248,9 +234,12 @@ class Game(Screen):
         self.hero.pos = (cur_x, cur_y)   
 
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
-            print("colliding!")
-        else:
-            print("not colliding!")
+            # print("colliding!")
+            self.enemy.pos = (random.randint(50,450), random.randint(50,550)) 
+            self.score += 1
+            print(self.score)
+        # else:
+            # print("not colliding!")
 
     def on_enter(self, **kwargs):
 
@@ -261,11 +250,12 @@ class Game(Screen):
 
         self.pressed_keys = set()
         Clock.schedule_interval(self.move_step, 0)
-
+        
         with self.canvas:
             self.hero = Rectangle(source='snake_head.png', pos=(1,2 ), size=(40, 40),)
             
             self.enemy = Rectangle(source='fruit.png', pos=(random.randint(50,450), random.randint(50,550)), size=(30, 30))
+    
 
 
 
@@ -288,7 +278,7 @@ class Game(Screen):
 screen_manager = ScreenManager()
 screen_manager.add_widget(Menu(name ="screen_one"))
 screen_manager.add_widget(soccerscreen(name = 'football_game'))
-screen_manager.add_widget(Game(name ="Snake_game"))
+screen_manager.add_widget(SnakeGame(name ="Snake_game"))
 # screen_manager.add_widget(ScreenFour(name ="screen_four"))
 # screen_manager.add_widget(ScreenFive(name ="screen_five"))
 # screen_manager.current = 'football_game'
