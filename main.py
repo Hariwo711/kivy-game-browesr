@@ -58,7 +58,7 @@ class SoccerBall(Widget):
 
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos
-spd = 20
+    spd = 20
 
 class SoccerGame(Widget):
     ball = ObjectProperty(None)
@@ -140,7 +140,7 @@ class SoccerGame(Widget):
         self.ball.center = self.center
         self.ball.velocity = vel
 
-    def update(self, dt):
+    def update(self):
         self.ball.move()
 
         # bounce of paddles
@@ -178,6 +178,8 @@ class SoccerGame(Widget):
         self.keybord.bind(on_key_up=self._on_key_up)
         self.pressed_keys = set()
         Clock.schedule_interval(self.move_step, 0)
+        self.update()
+        self.serve_ball()
 
 class soccerscreen(Screen):
     game_engine = ObjectProperty(None)
