@@ -1,3 +1,4 @@
+from types import NoneType
 import kivy 
 from kivy.app import App
 from kivy.lang import Builder
@@ -15,9 +16,8 @@ from kivy.graphics import Rectangle
 
 # kv = Builder.load_file("screen.kv")
 kv = Builder.load_file("screen.kv")
-kv2 = Builder.load_file("football.kv")
 
-class ScreenOne(Screen):
+class Menu(Screen):
     pass
   
 
@@ -67,11 +67,7 @@ class SoccerGame(Widget):
 
     def __init__(self, **kwargs):
         super(SoccerGame, self).__init__(**kwargs)
-        self.keybord = Window.request_keyboard(self._on_keyboard_closed, self)
-        self.keybord.bind(on_key_down=self._on_key_down)
-        self.keybord.bind(on_key_up=self._on_key_up)
-        self.pressed_keys = set()
-        Clock.schedule_interval(self.move_step, 0)
+
         # Clock.schedule_interval(self.new_test, 0)
 
     def _on_keyboard_closed(self):
@@ -176,16 +172,18 @@ class SoccerGame(Widget):
         if self.ball.velocity_y > 5:
             self.ball.velocity_y = 4
         print(self.ball.velocity_y)
-    
-    def start(self):
-        self.update(1/ 60)
-class Footballscreen(Screen):
+    def start(self, *args):
+        self.keybord = Window.request_keyboard(self._on_keyboard_closed, self)
+        self.keybord.bind(on_key_down=self._on_key_down)
+        self.keybord.bind(on_key_up=self._on_key_up)
+        self.pressed_keys = set()
+        Clock.schedule_interval(self.move_step, 0)
+
+class soccerscreen(Screen):
     game_engine = ObjectProperty(None)
-
     def on_enter(self):
-        # we screen comes into view, start the game   
+        # we screen comes into view, start the game
         self.game_engine.start()
-
 
 
 
@@ -284,8 +282,8 @@ class Game(Screen):
 
 
 screen_manager = ScreenManager()
-screen_manager.add_widget(ScreenOne(name ="screen_one"))
-screen_manager.add_widget(Footballscreen(name = 'football_game'))
+screen_manager.add_widget(Menu(name ="screen_one"))
+screen_manager.add_widget(soccerscreen(name = 'football_game'))
 screen_manager.add_widget(Game(name ="Snake_game"))
 # screen_manager.add_widget(ScreenFour(name ="screen_four"))
 # screen_manager.add_widget(ScreenFive(name ="screen_five"))
