@@ -185,10 +185,12 @@ class soccerscreen(Screen):
 
 
 
+
 SnakeGamePoints = 0
 
 
-#to say if the snake has eaten the fruit
+
+#Colision detection Code
 def collides(rect1,rect2):
     r1x = rect1[0][0]
     r1y = rect1[0][1]
@@ -203,6 +205,9 @@ def collides(rect1,rect2):
         return True
     else:
         return False
+
+
+#Pumps Snake Game
 class SnakeGame(Screen):
     score = NumericProperty(SnakeGamePoints)
     def __init__(self, **kwargs):
@@ -262,9 +267,76 @@ class SnakeGame(Screen):
         with self.canvas:
             self.hero = Rectangle(source='snake_head.png', pos=(1,2 ), size=(40, 40),)
             
-            self.enemy = Rectangle(source='fruit.png', pos=(random.randint(50,750), random.randint(50,560)), size=(50, 30))
+            self.enemy = Rectangle(source='assets/orange.png', pos=(random.randint(50,750), random.randint(50,560)), size=(50, 30))
 
 
+
+
+
+
+class PokemonFoodPicker(Screen):
+    score = NumericProperty(SnakeGamePoints)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    def _on_keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_key_down)
+        self._keyboard.unbind(on_key_up=self._on_key_up)
+        self._keyboard = None
+
+    def _on_key_down(self, keyboard, keycode, text, modifilers):
+        print('down', text)
+        self.pressed_keys.add(text)
+    
+    def _on_key_up(self, keyboard, keycode):
+        text = keycode[1]
+        print('up', text)
+
+        if text in self.pressed_keys:
+            self.pressed_keys.remove(text)
+    
+    def move_step(self, dt):
+        global SnakeGamePoints
+        cur_x = self.hero.pos[0]
+        cur_y = self.hero.pos[1]
+
+        step = 150 * dt
+
+        if 'w' in self.pressed_keys:
+            cur_y += step
+        if 's' in self.pressed_keys:
+            cur_y -= step
+        if 'a' in self.pressed_keys:
+            cur_x -= step
+        if 'd' in self.pressed_keys:
+            cur_x += step
+
+        self.hero.pos = (cur_x, cur_y)   
+
+        if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
+            print("colliding!")
+            self.enemy.pos = (random.randint(50,750), random.randint(50,560))
+            self.score += 1
+            print(self.score)
+        elif collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
+            print("it")
+    def on_enter(self, **kwargs):
+
+        self._keyboard = Window.request_keyboard(
+             self._on_keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_key_down)
+        self._keyboard.bind(on_key_up=self._on_key_up)
+
+        self.pressed_keys = set()
+        Clock.schedule_interval(self.move_step, 0)
+        
+        with self.canvas:
+            self.hero = Rectangle(source='snake_head.png', pos=(1,2 ), size=(40, 40),)
+            
+            self.enemy = Rectangle(source='assets/orange.png', pos=(random.randint(50,750), random.randint(50,560)), size=(80, 50))
+
+            self.enemy2 = Rectangle(source='assets/apple.png', pos=(random.randint(50,750), random.randint(50,560)), size=(45,50))
+
+            self.enemy3 = Rectangle(source='assets/pineapple.png', pos=(random.randint(50,750), random.randint(50,560)), size=(80,65) )
 
 
 
@@ -286,6 +358,7 @@ screen_manager = ScreenManager()
 screen_manager.add_widget(Menu(name ="screen_one"))
 screen_manager.add_widget(soccerscreen(name = 'football_game'))
 screen_manager.add_widget(SnakeGame(name ="Snake_game"))
+screen_manager.add_widget(PokemonFoodPicker(name = 'food_picker'))
 # screen_manager.add_widget(ScreenFour(name ="screen_four"))
 # screen_manager.add_widget(ScreenFive(name ="screen_five"))
 # screen_manager.current = 'football_game'
