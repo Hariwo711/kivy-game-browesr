@@ -18,11 +18,12 @@ from kivy.graphics import Rectangle
 # kv = Builder.load_file("screen.kv")
 kv = Builder.load_file("screen.kv")
 
+#Setsup The menu screen from .kv file
 class Menu(Screen):
     pass
   
 
-
+#setting up soccer player
 class SoccerPlayer(Widget):
     score = NumericProperty(0)
 
@@ -44,6 +45,7 @@ class SoccerBall(Widget):
         self.pos = Vector(*self.velocity) + self.pos
     spd = 20
 
+#setting up soccer Game
 class SoccerGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
@@ -87,6 +89,7 @@ class SoccerGame(Widget):
         if 'w' in self.pressed_keys:
             cur2_y += step
             
+            
         if 'd' in self.pressed_keys:
             cur2_x += step
         if 's' in self.pressed_keys:
@@ -106,17 +109,22 @@ class SoccerGame(Widget):
         
         
         if 'z' in self.pressed_keys:
-            cur_x = self.player1.pos[1]
-            cur_y = self.player1.pos[1]
-            cur2_x = self.width*3/4
-            cur2_y = self.width*3/4
+            cur_x = self.center_x+100
+            cur_y = self.center_y-90
+            cur2_x = self.center_x-250
+            cur2_y = self.center_y-90
             self.player1.score = 0
             self.player2.score = 0
         if 'x' in self.pressed_keys:
-            cur_x = self.center_x-10
-            cur_y = self.center_y-20
-            cur2_x = self.center_x+20
-            cur2_y = self.center_y-20
+            cur_x = self.center_x+100
+            cur_y = self.center_y-90
+            cur2_x = self.center_x-250
+            cur2_y = self.center_y-90
+            randomlist = ["1", "-1"]
+            direction_ball = int(random.choice(randomlist))
+            self.ball.center = self.center
+            self.ball.velocity = (4 * direction_ball, 0)
+        if 'c' in self.pressed_keys:
             randomlist = ["1", "-1"]
             direction_ball = int(random.choice(randomlist))
             self.ball.center = self.center
@@ -234,8 +242,8 @@ class SnakeGame(Screen):
         self.hero.pos = (cur_x, cur_y)   
 
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
-            # print("colliding!")
-            self.enemy.pos = (random.randint(50,450), random.randint(50,550)) 
+            print("colliding!")
+            self.enemy.pos = (random.randint(50,750), random.randint(50,560))
             self.score += 1
             print(self.score)
         # else:
@@ -254,8 +262,7 @@ class SnakeGame(Screen):
         with self.canvas:
             self.hero = Rectangle(source='snake_head.png', pos=(1,2 ), size=(40, 40),)
             
-            self.enemy = Rectangle(source='fruit.png', pos=(random.randint(50,450), random.randint(50,550)), size=(30, 30))
-    
+            self.enemy = Rectangle(source='fruit.png', pos=(random.randint(50,750), random.randint(50,560)), size=(50, 30))
 
 
 
