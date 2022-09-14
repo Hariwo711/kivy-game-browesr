@@ -277,7 +277,7 @@ def update_posandscore(hero_posandsize,enemy_posandsize,score,goodorbad):
     if goodorbad == 'good':
         score += 1
     elif goodorbad == 'bad':
-        score = score-1
+        score = score-3
 
     return enemy_posandsize,score
 #Uses Colision Function
@@ -365,14 +365,13 @@ class PokemonFoodPicker(Screen):
             print(my_random)
                 
          
-        # if self.score < -2:
-        #     screen_manager.current = 'game_over_screen'
-        #     self.score = 0     
-    
+        if self.score < -2:
+            screen_manager.current = 'game_over_screen'     
     
     
     def on_enter(self, **kwargs):
-
+        
+        
         self._keyboard = Window.request_keyboard(
                 self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_key_down)
@@ -395,8 +394,7 @@ class PokemonFoodPicker(Screen):
             self.enemy4 = Rectangle(source='assets/toxic_mushroom.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
 
             self.enemy5 = Rectangle(source='assets/pizza.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
-    def on_leave(self, *args):
-        self.clear_widgets()    
+
             
 
 
@@ -425,6 +423,14 @@ screen_manager.add_widget(game_over(name = 'game_over_screen'))
 
 # Create the App class
 # Create the App class
+
+
+# def restart(self):
+#     self.root.clear_widgets()
+#     self.stop()
+#     return ScreenApp.run()
+ 
+    
 class ScreenApp(App):
     def build(self):
         return screen_manager
