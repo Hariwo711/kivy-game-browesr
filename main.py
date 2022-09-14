@@ -1,6 +1,3 @@
-from cgitb import text
-from tkinter import Label
-from types import NoneType
 import kivy 
 from kivy.app import App
 from kivy.lang import Builder
