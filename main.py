@@ -282,6 +282,8 @@ def update_posandscore(hero_posandsize,enemy_posandsize,score,goodorbad):
     return enemy_posandsize,score
 #Uses Colision Function
 
+enemy4_Type = 1
+
 class PokemonFoodPicker(Screen):
     score = NumericProperty(SnakeGamePoints)
     def __init__(self, **kwargs):
@@ -304,6 +306,7 @@ class PokemonFoodPicker(Screen):
     
     def move_step(self, dt):
         global SnakeGamePoints
+        global enemy4_Type
         cur_x = self.hero.pos[0]
         cur_y = self.hero.pos[1]
 
@@ -337,11 +340,11 @@ class PokemonFoodPicker(Screen):
             self.enemy3.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy3.pos,self.enemy3.size),self.score,'good')
         
         elif collides((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size)):
-            if self.enemy4.source == ('assets/toxic_mushroom.png'):
+            if enemy4_Type == 1:
                 print('test if true')
                 self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'bad')
             
-            else: 
+            elif enemy4_Type == 0:
                 self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'good')
         
         elif collides((self.hero.pos,self.hero.size),(self.enemy5.pos,self.enemy5.size)):
@@ -351,17 +354,23 @@ class PokemonFoodPicker(Screen):
         
         if self.score != check_score:
             my_random = random.randrange(0,2)
-            if my_random<1:
+            if my_random<1: 
                 self.enemy4.source = ('assets/powerup.png')
+                enemy4_Type = 0
             else:
                 self.enemy4.source = ('assets/toxic_mushroom.png')
+                enemy4_Type = 1
+                
                        
             print(my_random)
                 
          
-        if self.score < -2:
-            screen_manager.current = 'game_over_screen'
-            self.score = 0     
+        # if self.score < -2:
+        #     screen_manager.current = 'game_over_screen'
+        #     self.score = 0     
+    
+    
+    
     def on_enter(self, **kwargs):
 
         self._keyboard = Window.request_keyboard(
@@ -369,7 +378,7 @@ class PokemonFoodPicker(Screen):
         self._keyboard.bind(on_key_down=self._on_key_down)
         self._keyboard.bind(on_key_up=self._on_key_up)
 
-        self.score = 0
+        
         
         self.pressed_keys = set()
         Clock.schedule_interval(self.move_step, 0)
