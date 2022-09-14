@@ -18,7 +18,9 @@ kv = Builder.load_file("screen.kv")
 #Setsup The menu screen from .kv file
 class Menu(Screen):
     pass
-  
+
+class game_over(Screen):
+    pass
 
 #setting up soccer player
 class SoccerPlayer(Widget):
@@ -269,7 +271,16 @@ class SnakeGame(Screen):
 
 
 
+def update_posandscore(hero_posandsize,enemy_posandsize,score,goodorbad):
+    enemy_posandsize = (random.randint(50,750), random.randint(50,560))
+    
+    if goodorbad == 'good':
+        score += 1
+    elif goodorbad == 'bad':
+        score = score-1
 
+    return enemy_posandsize,score
+#Uses Colision Function
 
 class PokemonFoodPicker(Screen):
     score = NumericProperty(SnakeGamePoints)
@@ -298,6 +309,9 @@ class PokemonFoodPicker(Screen):
 
         step = 150 * dt
 
+        #defining score for checking if changed
+        check_score = self.score
+
         if 'w' in self.pressed_keys:
             cur_y += step
         if 's' in self.pressed_keys:
@@ -308,34 +322,73 @@ class PokemonFoodPicker(Screen):
             cur_x += step
 
         self.hero.pos = (cur_x, cur_y)   
-
+        # if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
+        #     print("colliding!")
+        #     self.enemy.pos = (random.randint(50,750), random.randint(50,560))
+        #     self.score += 1
+        #     print(self.score)
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
-            print("colliding!")
-            self.enemy.pos = (random.randint(50,750), random.randint(50,560))
-            self.score += 1
-            print(self.score)
-        elif collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
-            print("it")
+            self.enemy.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size),self.score,'good')
+        
+        elif collides((self.hero.pos,self.hero.size),(self.enemy2.pos,self.enemy2.size)):
+            self.enemy2.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy2.pos,self.enemy2.size),self.score,'good')
+        
+        elif collides((self.hero.pos,self.hero.size),(self.enemy3.pos,self.enemy3.size)):
+            self.enemy3.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy3.pos,self.enemy3.size),self.score,'good')
+        
+        elif collides((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size)):
+            if self.enemy4.source == ('assets/toxic_mushroom.png'):
+                print('test if true')
+                self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'bad')
+            
+            else: 
+                self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'good')
+        
+        elif collides((self.hero.pos,self.hero.size),(self.enemy5.pos,self.enemy5.size)):
+            self.enemy5.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy5.pos,self.enemy5.size),self.score,'good')
+        
+        
+        
+        if self.score != check_score:
+            my_random = random.randrange(0,2)
+            if my_random<1:
+                self.enemy4.source = ('assets/powerup.png')
+            else:
+                self.enemy4.source = ('assets/toxic_mushroom.png')
+                       
+            print(my_random)
+                
+         
+        if self.score < -2:
+            screen_manager.current = 'game_over_screen'
+            self.score = 0     
     def on_enter(self, **kwargs):
 
         self._keyboard = Window.request_keyboard(
-             self._on_keyboard_closed, self)
+                self._on_keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_key_down)
         self._keyboard.bind(on_key_up=self._on_key_up)
 
+        self.score = 0
+        
         self.pressed_keys = set()
         Clock.schedule_interval(self.move_step, 0)
         
         with self.canvas:
-            self.hero = Rectangle(source='snake_head.png', pos=(1,2 ), size=(40, 40),)
+            self.hero = Rectangle(source='assets/Pickachu_sitting.png', pos=(1,2 ), size=(100, 100),)
             
             self.enemy = Rectangle(source='assets/orange.png', pos=(random.randint(50,750), random.randint(50,560)), size=(80, 50))
 
             self.enemy2 = Rectangle(source='assets/apple.png', pos=(random.randint(50,750), random.randint(50,560)), size=(45,50))
 
             self.enemy3 = Rectangle(source='assets/pineapple.png', pos=(random.randint(50,750), random.randint(50,560)), size=(80,65) )
+            
+            self.enemy4 = Rectangle(source='assets/toxic_mushroom.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
 
-
+            self.enemy5 = Rectangle(source='assets/pizza.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
+    def on_leave(self, *args):
+        self.clear_widgets()    
+            
 
 
 
@@ -356,9 +409,10 @@ screen_manager.add_widget(Menu(name ="screen_one"))
 screen_manager.add_widget(soccerscreen(name = 'football_game'))
 screen_manager.add_widget(SnakeGame(name ="Snake_game"))
 screen_manager.add_widget(PokemonFoodPicker(name = 'food_picker'))
+screen_manager.add_widget(game_over(name = 'game_over_screen'))
 # screen_manager.add_widget(ScreenFour(name ="screen_four"))
 # screen_manager.add_widget(ScreenFive(name ="screen_five"))
-# screen_manager.current = 'football_game'
+# screen_manager.current = 'game_over_screen'
 
 # Create the App class
 # Create the App class
