@@ -1,3 +1,5 @@
+
+from glob import glob
 import kivy 
 from kivy.app import App
 from kivy.lang import Builder
@@ -282,16 +284,22 @@ def update_posandscore(hero_posandsize,enemy_posandsize,score,goodorbad):
     if goodorbad == 'good':
         score += 1
     elif goodorbad == 'bad':
-        score = score-3
+        score -= 1
     elif goodorbad == 'super_good':
         score += 2 
+    elif goodorbad == 'super_bad':
+        score -= 3
     return enemy_posandsize,score
 #Uses Colision Function
+
+food_choice = 0
 
 enemy4_Type = 1
 
 class PokemonFoodPicker(Screen):
     score = NumericProperty(SnakeGamePoints)
+    food_choice = StringProperty(food_choice)
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
     def _on_keyboard_closed(self):
@@ -313,10 +321,20 @@ class PokemonFoodPicker(Screen):
     def move_step(self, dt):
         global SnakeGamePoints
         global enemy4_Type
+        global food_choice
+        
         cur_x = self.hero.pos[0]
         cur_y = self.hero.pos[1]
 
-        step = 150 * dt
+        step = 500 * dt
+
+        #check if good or bad
+        def checkgoodorbad(enemy_type, food_choice_fn):
+            
+            if enemy_type == food_choice_fn:
+                return 'good'
+            else:
+                return 'bad'
 
         #defining score for checking if changed
         check_score = self.score
@@ -337,29 +355,39 @@ class PokemonFoodPicker(Screen):
         #     self.score += 1
         #     print(self.score)
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
-            self.enemy.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size),self.score,'good')
+            self.enemy.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size),self.score, checkgoodorbad('Orange',self.food_choice))
         
         elif collides((self.hero.pos,self.hero.size),(self.enemy2.pos,self.enemy2.size)):
-            self.enemy2.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy2.pos,self.enemy2.size),self.score,'good')
+            self.enemy2.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy2.pos,self.enemy2.size),self.score, checkgoodorbad('Apple',self.food_choice))
         
         elif collides((self.hero.pos,self.hero.size),(self.enemy3.pos,self.enemy3.size)):
-            self.enemy3.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy3.pos,self.enemy3.size),self.score,'good')
+            self.enemy3.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy3.pos,self.enemy3.size),self.score, checkgoodorbad('Pineapple',self.food_choice))
         
         elif collides((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size)):
             if enemy4_Type == 1:
                 print('test if true')
-                self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'bad')
+                self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'super_bad')
             
             elif enemy4_Type == 0:
-                self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'good')
+                self.enemy4.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy4.pos,self.enemy4.size),self.score,'super_good')
         
         elif collides((self.hero.pos,self.hero.size),(self.enemy5.pos,self.enemy5.size)):
-            self.enemy5.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy5.pos,self.enemy5.size),self.score,'good')
+            self.enemy5.pos,self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy5.pos,self.enemy5.size),self.score,checkgoodorbad('Pizza',self.food_choice))
         
+        elif collides((self.hero.pos,self.hero.size),(self.enemy6.pos,self.enemy6.size)):
+            self.enemy6.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy6.pos,self.enemy6.size),self.score,'super_bad')
         
+        elif collides((self.hero.pos,self.hero.size),(self.enemy7.pos,self.enemy7.size)):
+            self.enemy7.pos, self.score = update_posandscore((self.hero.pos,self.hero.size),(self.enemy7.pos,self.enemy7.size),self.score,'super_bad')
         
+        #things to do when getting a point
         if self.score != check_score:
             my_random = random.randrange(0,6)
+            
+            food_types = ["Orange","Apple","Pineapple","Pizza"]
+            #chocing Food Type you need to eat
+            self.food_choice = random.choice(food_types)
+            print(self.food_choice)
             if my_random<1: 
                 self.enemy4.source = ('assets/powerup.png')
                 enemy4_Type = 0
@@ -368,7 +396,7 @@ class PokemonFoodPicker(Screen):
                 enemy4_Type = 1
                 
                        
-            print('',my_random)
+            print('Your random number is',my_random)
                 
          
         if self.score < -2:
@@ -376,7 +404,12 @@ class PokemonFoodPicker(Screen):
     
     
     def on_enter(self, **kwargs):
+        global food_choice
         
+        food_types = ["Orange","Apple","Pineapple","Pizza"]
+        
+        #chocing Food Type you need to eat
+        self.food_choice = random.choice(food_types)
         
         self._keyboard = Window.request_keyboard(
                 self._on_keyboard_closed, self)
@@ -401,7 +434,9 @@ class PokemonFoodPicker(Screen):
 
             self.enemy5 = Rectangle(source='assets/pizza.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
 
+            self.enemy6 = Rectangle(source='assets/toxic_mushroom.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))            
             
+            self.enemy7 = Rectangle(source='assets/toxic_mushroom.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
 
 
 
