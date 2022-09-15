@@ -235,13 +235,18 @@ class SnakeGame(Screen):
         step = 150 * dt
 
         if 'w' in self.pressed_keys:
+            self.hero.source = 'assets/snake_parts/snake_head_flip.png'
+            # self.hero.orientation=(-40, 0)
             cur_y += step
-        if 's' in self.pressed_keys:
+        elif 's' in self.pressed_keys:
             cur_y -= step
-        if 'a' in self.pressed_keys:
+            self.hero.source = 'assets/snake_parts/snake_head.png'
+        elif 'a' in self.pressed_keys:
             cur_x -= step
-        if 'd' in self.pressed_keys:
+            self.hero.source = 'assets/snake_parts/snake_head_left.png'
+        elif 'd' in self.pressed_keys:
             cur_x += step
+            self.hero.source = 'assets/snake_parts/snake_head_right.png'
 
         self.hero.pos = (cur_x, cur_y)   
 
@@ -264,7 +269,7 @@ class SnakeGame(Screen):
         Clock.schedule_interval(self.move_step, 0)
         
         with self.canvas:
-            self.hero = Rectangle(source='snake_head.png', pos=(1,2 ), size=(40, 40),)
+            self.hero = Rectangle(source='assets/snake_parts/snake_head.png', pos=(1,2 ), size=(400, 400))
             
             self.enemy = Rectangle(source='assets/orange.png', pos=(random.randint(50,750), random.randint(50,560)), size=(50, 30))
 
@@ -278,7 +283,8 @@ def update_posandscore(hero_posandsize,enemy_posandsize,score,goodorbad):
         score += 1
     elif goodorbad == 'bad':
         score = score-3
-
+    elif goodorbad == 'super_good':
+        score += 2 
     return enemy_posandsize,score
 #Uses Colision Function
 
@@ -353,7 +359,7 @@ class PokemonFoodPicker(Screen):
         
         
         if self.score != check_score:
-            my_random = random.randrange(0,2)
+            my_random = random.randrange(0,6)
             if my_random<1: 
                 self.enemy4.source = ('assets/powerup.png')
                 enemy4_Type = 0
@@ -362,7 +368,7 @@ class PokemonFoodPicker(Screen):
                 enemy4_Type = 1
                 
                        
-            print(my_random)
+            print('',my_random)
                 
          
         if self.score < -2:
