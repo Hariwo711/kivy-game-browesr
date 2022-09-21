@@ -4,7 +4,7 @@
     BoxLayout:
         Button:
             text: "Football Game"
-            background_color : 0, 0, 1, 1
+            background_color : 10, 0, 0, 1
             on_press:
                 # You can define the duration of the change
                 # and the direction of the slide
@@ -13,7 +13,7 @@
                 root.manager.current = 'football_game'
         Button:
             text: "Snake Game"
-            background_color : 1, 1, 0, 1
+            background_color : 10, 0.9, 0, 1
             on_press:
                 root.manager.transition.direction = 'left'
                 root.manager.transition.duration = 1
@@ -21,7 +21,7 @@
 
         Button:
             text: "Pikachu wants to eat food"
-            background_color : 1, 0, 1, 1
+            background_color : 9.8, 0, 10, 1
             on_press:
                 root.manager.transition.direction = 'left'
                 root.manager.transition.duration = 1
@@ -113,7 +113,7 @@
 
 <SnakeGame>:
     Label:
-        text: str(root.score)
+        text: str(root.score-1)
         center_x: root.center_x+50
     Label:
         text: 'Your Score:'
