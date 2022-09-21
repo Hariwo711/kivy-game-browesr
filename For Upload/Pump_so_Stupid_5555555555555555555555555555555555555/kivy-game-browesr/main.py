@@ -280,6 +280,8 @@ class SnakeGame(Screen):
         
         self.hero.pos = (check_Button_and_move(Current_Button_press,cur_x,cur_y,step))   
         self.tail.pos = (int(self.hero.pos[0])-42,int(self.hero.pos[1]))
+        
+        
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
             print("colliding!")
             self.enemy.pos = (random.randint(50,400), random.randint(50,400))
