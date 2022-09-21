@@ -1,5 +1,3 @@
-
-from glob import glob
 import kivy 
 from kivy.app import App
 from kivy.lang import Builder
@@ -8,7 +6,7 @@ from kivy.uix.widget import Widget
 
 import random
 from kivy.app import App
-from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty
+from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty, BooleanProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -185,11 +183,10 @@ class soccerscreen(Screen):
 
 
 
+SnakeGamePoints = 1
 
-
-SnakeGamePoints = 0
-
-
+Height = 400
+Width = 400
 
 #Colision detection Code
 def collides(rect1,rect2):
@@ -209,8 +206,14 @@ def collides(rect1,rect2):
 
 
 #Pumps Snake Game
+class SnakeTail(Widget):
+
+    def move(self, new_pos):
+        self.pos = new_pos
+
 class SnakeGame(Screen):
     score = NumericProperty(SnakeGamePoints)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
     def _on_keyboard_closed(self):
@@ -233,32 +236,35 @@ class SnakeGame(Screen):
         global SnakeGamePoints
         cur_x = self.hero.pos[0]
         cur_y = self.hero.pos[1]
-
-        step = 150 * dt
-
+        step =  self.score * 0.75
+        if self.score < 20 :
+            step =  self.score * 0.75
+        elif self.score > 20:
+            step =  20 * 0.75
         if 'w' in self.pressed_keys:
-            self.hero.source = 'assets/snake_parts/snake_head_flip.png'
-            # self.hero.orientation=(-40, 0)
+           
             cur_y += step
         elif 's' in self.pressed_keys:
             cur_y -= step
-            self.hero.source = 'assets/snake_parts/snake_head.png'
+           
         elif 'a' in self.pressed_keys:
             cur_x -= step
-            self.hero.source = 'assets/snake_parts/snake_head_left.png'
+            
         elif 'd' in self.pressed_keys:
             cur_x += step
-            self.hero.source = 'assets/snake_parts/snake_head_right.png'
+            
 
         self.hero.pos = (cur_x, cur_y)   
-
+        self.tail.pos = (int(self.hero.pos[0])-42,int(self.hero.pos[1]))
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
             print("colliding!")
-            self.enemy.pos = (random.randint(50,750), random.randint(50,560))
+            self.enemy.pos = (random.randint(50,400), random.randint(50,400))
             self.score += 1
             print(self.score)
         # else:
             # print("not colliding!")
+        # if self.score += 1 
+            
 
     def on_enter(self, **kwargs):
 
@@ -271,9 +277,14 @@ class SnakeGame(Screen):
         Clock.schedule_interval(self.move_step, 0)
         
         with self.canvas:
-            self.hero = Rectangle(source='assets/snake_parts/snake_head.png', pos=(1,2 ), size=(400, 400))
+            self.hero = Rectangle (pos=(200,100 ), size=(40, 40))
+            def tail_build(name_of_tail ,pos_Of_tail, number_of_tail):
+                self.name_of_tail.pos = (pos_Of_tail)
+                return True
             
-            self.enemy = Rectangle(source='assets/orange.png', pos=(random.randint(50,750), random.randint(50,560)), size=(50, 30))
+            self.tail = Rectangle (pos = (int(self.hero.pos[0])-0,int(self.hero.pos[1])), size=(40,40))
+            self.enemy = Rectangle( pos=(random.randint(50,750), random.randint(50,560)), size=(40, 40))
+        print(self.hero.pos[1])
 
 
 
@@ -296,8 +307,11 @@ food_choice = 0
 
 enemy4_Type = 1
 
+PokenmonGamePoints = 0
+
+
 class PokemonFoodPicker(Screen):
-    score = NumericProperty(SnakeGamePoints)
+    score = NumericProperty(PokenmonGamePoints)
     food_choice = StringProperty(food_choice)
     
     def __init__(self, **kwargs):
