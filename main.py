@@ -12,6 +12,8 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Rectangle
 
+from kivy.core.audio import SoundLoader
+
 # kv = Builder.load_file("screen.kv")
 kv = Builder.load_file("screen.kv")
 
@@ -188,6 +190,8 @@ SnakeGamePoints = 1
 Height = 400
 Width = 400
 
+Current_Button_press=0
+
 #Colision detection Code
 def collides(rect1,rect2):
     r1x = rect1[0][0]
@@ -234,6 +238,7 @@ class SnakeGame(Screen):
     
     def move_step(self, dt):
         global SnakeGamePoints
+        global Current_Button_press
         cur_x = self.hero.pos[0]
         cur_y = self.hero.pos[1]
         step =  self.score * 0.75
@@ -242,20 +247,39 @@ class SnakeGame(Screen):
         elif self.score > 20:
             step =  20 * 0.75
         if 'w' in self.pressed_keys:
-           
-            cur_y += step
+            # cur_y += step
+            Current_Button_press= 'w'
         elif 's' in self.pressed_keys:
-            cur_y -= step
-           
+            # cur_y -= step
+            Current_Button_press= 's'
         elif 'a' in self.pressed_keys:
-            cur_x -= step
-            
+            # cur_x -= step
+            Current_Button_press= 'a'
         elif 'd' in self.pressed_keys:
-            cur_x += step
-            
+            # cur_x += step
+            Current_Button_press= 'd'
 
-        self.hero.pos = (cur_x, cur_y)   
+        print(Current_Button_press)
+        
+        def check_Button_and_move(button,cur_x,cur_y,step):
+            if button == 'w':
+                cur_y += step
+            elif button == 's':
+                cur_y -= step
+            elif button == 'a':
+                cur_x -= step
+            elif button == 'd':
+                cur_x += step
+            
+            
+            return cur_x,cur_y
+
+        
+        
+        self.hero.pos = (check_Button_and_move(Current_Button_press,cur_x,cur_y,step))   
         self.tail.pos = (int(self.hero.pos[0])-42,int(self.hero.pos[1]))
+        
+        
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
             print("colliding!")
             self.enemy.pos = (random.randint(50,400), random.randint(50,400))
@@ -413,9 +437,10 @@ class PokemonFoodPicker(Screen):
             print('Your random number is',my_random)
                 
          
-        if self.score < -2:
-            screen_manager.current = 'game_over_screen'     
-    
+        if self.score < 0:
+            screen_manager.current = 'game_over_screen'
+            self.sound = SoundLoader.load('assets/Ear_rape.mp3')
+            self.sound.play()
     
     def on_enter(self, **kwargs):
         global food_choice
