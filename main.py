@@ -171,6 +171,7 @@ class SoccerGame(Widget):
                 self.serve_ball(vel=(4*direction_ball, 0))
             else:
                 self.ball.velocity_x *= -1
+        
         if self.ball.velocity_x > 5:
             self.ball.velocity_x = 4
         print(self.ball.velocity_x)
@@ -333,6 +334,8 @@ class SnakeGame(Screen):
         self.sound = SoundLoader.load('assets/relaxing_music.mp3')
         self.sound.play()
 
+    def on_leave(self, *args):
+        self.sound.stop()
 
 
 def update_posandscore(hero_posandsize,enemy_posandsize,score,goodorbad):
@@ -461,7 +464,8 @@ class PokemonFoodPicker(Screen):
          
         if self.score < 0:
             screen_manager.current = 'game_over_screen'
-
+        elif self.score > 2:
+            screen_manager.current = 'winning_screen'
     
     def on_enter(self, **kwargs):
         global food_choice
@@ -499,7 +503,11 @@ class PokemonFoodPicker(Screen):
             self.enemy7 = Rectangle(source='assets/toxic_mushroom.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
     
     def on_leave(self, *args):
-        self.sound = SoundLoader.load('assets/mario_OH_no.mp3')
+        
+        if self.score < 0:
+            self.sound = SoundLoader.load('assets/mario_OH_no.mp3')
+        elif self.score > 2:
+            self.sound = SoundLoader.load('assets/pika_pika.mp3')
         self.sound.play()
 
 

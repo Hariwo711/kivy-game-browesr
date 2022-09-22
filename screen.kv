@@ -42,8 +42,8 @@
     BoxLayout:
     Button:
         text: 'YOU WON!'
-        font_name: 'fonts/Gemini Moon.otf'
-        font_size: 160
+        font_name: 'fonts/SuperMario256.ttf'
+        font_size: 100
         background_color : 0, 0, 10.0, 0.75
         on_press:
             app.stop()
@@ -126,10 +126,9 @@
 
 <SnakeGame>:
     Label:
-        text: str(root.score-1)
-        center_x: root.center_x+50
-    Label:
-        text: 'Your Score:'
+        text: 'Your Score:' + str(root.score-1)
+        font_size: 50
+        font_name: 'fonts/Gemini Moon.otf'
 
 
 <PokemonFoodPicker>:
