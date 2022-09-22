@@ -10,7 +10,7 @@ from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProper
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.core.window import Window
-from kivy.graphics import Rectangle
+from kivy.graphics import Rectangle,Color
 
 from kivy.core.audio import SoundLoader
 
@@ -304,6 +304,11 @@ class SnakeGame(Screen):
             self.enemy.pos = (random.randint(50,400), random.randint(50,400))
             self.score += 1
             print(self.score)
+        
+        if collides((self.hero.pos,self.hero.size),(self.border.pos,self.border.size)):
+            pass
+        else:
+            screen_manager.current = 'game_over_screen'
         # else:
             # print("not colliding!")
         # if self.score += 1 
@@ -321,6 +326,8 @@ class SnakeGame(Screen):
         Clock.schedule_interval(self.move_step, 0)
         
         with self.canvas:
+            # self.border = Rectangle(size=(800,800),color=Color(0,0,0,0))
+            
             self.hero = Rectangle (pos=(200,100 ), size=(40, 40))
             def tail_build(name_of_tail ,pos_Of_tail, number_of_tail):
                 self.name_of_tail.pos = (pos_Of_tail)
@@ -328,6 +335,10 @@ class SnakeGame(Screen):
             
             self.tail = Rectangle (pos = (int(self.hero.pos[0])-0,int(self.hero.pos[1])), size=(40,40))
             self.enemy = Rectangle( pos=(random.randint(50,750), random.randint(50,560)), size=(40, 40))
+            
+            self.border = Rectangle(size=(800,800),color=Color(0,0,0,0))
+            
+            
         print(self.hero.pos[1])
 
 
@@ -335,7 +346,9 @@ class SnakeGame(Screen):
         self.sound.play()
 
     def on_leave(self, *args):
+        global Current_Button_press
         self.sound.stop()
+        Current_Button_press=0
 
 
 def update_posandscore(hero_posandsize,enemy_posandsize,score,goodorbad):
