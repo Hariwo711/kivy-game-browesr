@@ -263,7 +263,8 @@ class SnakeGame(Screen):
         elif 'd' in self.pressed_keys:
             # cur_x += step
             Current_Button_press= 'd'
-
+        elif screen_manager.current == 'winning_screen':
+            Current_Button_press= 0
         print(Current_Button_press)
         
         def check_Button_and_move(button,cur_x,cur_y,step):
@@ -334,7 +335,7 @@ class SnakeGame(Screen):
                 return True
             
             self.tail = Rectangle (pos = (int(self.hero.pos[0])-0,int(self.hero.pos[1])), size=(40,40))
-            self.enemy = Rectangle( pos=(random.randint(50,750), random.randint(50,560)), size=(40, 40))
+            self.enemy = Rectangle(source='df.png', pos=(random.randint(50,750), random.randint(50,560)), size=(50, 50))
             
             self.border = Rectangle(size=(800,800),color=Color(0,0,0,0))
             
