@@ -447,6 +447,9 @@ class PokemonFoodPicker(Screen):
         if self.score != check_score:
             my_random = random.randrange(0,6)
             
+            self.sound = SoundLoader.load('assets/food_get.wav')
+            self.sound.play()
+            
             food_types = ["Orange","Apple","Pineapple","Pizza"]
             #chocing Food Type you need to eat
             self.food_choice = random.choice(food_types)
@@ -464,7 +467,7 @@ class PokemonFoodPicker(Screen):
          
         if self.score < 0:
             screen_manager.current = 'game_over_screen'
-        elif self.score > 2:
+        elif self.score > 19:
             screen_manager.current = 'winning_screen'
     
     def on_enter(self, **kwargs):
@@ -506,7 +509,7 @@ class PokemonFoodPicker(Screen):
         
         if self.score < 0:
             self.sound = SoundLoader.load('assets/mario_OH_no.mp3')
-        elif self.score > 2:
+        elif self.score > 19:
             self.sound = SoundLoader.load('assets/pika_pika.mp3')
         self.sound.play()
 
