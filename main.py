@@ -22,6 +22,10 @@ class Menu(Screen):
     pass
 
 class game_over(Screen):
+
+    pass
+
+class winning(Screen):
     pass
 
 #setting up soccer player
@@ -277,18 +281,33 @@ class SnakeGame(Screen):
         
         
         self.hero.pos = (check_Button_and_move(Current_Button_press,cur_x,cur_y,step))   
+        
         self.tail.pos = (int(self.hero.pos[0])-42,int(self.hero.pos[1]))
         
+        if Current_Button_press =='w':
+            self.tail.pos = (int(self.hero.pos[0]),int(self.hero.pos[1])-42)
+        elif Current_Button_press == 's':
+            self.tail.pos = (int(self.hero.pos[0]),int(self.hero.pos[1])+42)
+        elif Current_Button_press == 'a':
+            self.tail.pos = (int(self.hero.pos[0])+42,int(self.hero.pos[1]))
+        elif Current_Button_press == 'd':
+            self.tail.pos = (int(self.hero.pos[0])-42,int(self.hero.pos[1]))
         
         if collides((self.hero.pos,self.hero.size),(self.enemy.pos,self.enemy.size)):
             print("colliding!")
+            
+            
+            self.sound = SoundLoader.load('assets/eating_sound.wav')
+            self.sound.play()
+            
             self.enemy.pos = (random.randint(50,400), random.randint(50,400))
             self.score += 1
             print(self.score)
         # else:
             # print("not colliding!")
         # if self.score += 1 
-            
+        if self.score > 30:
+            screen_manager.current = 'winning_screen'
 
     def on_enter(self, **kwargs):
 
@@ -310,6 +329,9 @@ class SnakeGame(Screen):
             self.enemy = Rectangle( pos=(random.randint(50,750), random.randint(50,560)), size=(40, 40))
         print(self.hero.pos[1])
 
+
+        self.sound = SoundLoader.load('assets/relaxing_music.mp3')
+        self.sound.play()
 
 
 
@@ -439,8 +461,7 @@ class PokemonFoodPicker(Screen):
          
         if self.score < 0:
             screen_manager.current = 'game_over_screen'
-            self.sound = SoundLoader.load('assets/Ear_rape.mp3')
-            self.sound.play()
+
     
     def on_enter(self, **kwargs):
         global food_choice
@@ -476,7 +497,10 @@ class PokemonFoodPicker(Screen):
             self.enemy6 = Rectangle(source='assets/toxic_mushroom.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))            
             
             self.enemy7 = Rectangle(source='assets/toxic_mushroom.png',pos=(random.randint(50,750), random.randint(50,560)), size=(50,50))
-
+    
+    def on_leave(self, *args):
+        self.sound = SoundLoader.load('assets/mario_OH_no.mp3')
+        self.sound.play()
 
 
 
@@ -497,9 +521,10 @@ screen_manager.add_widget(soccerscreen(name = 'football_game'))
 screen_manager.add_widget(SnakeGame(name ="Snake_game"))
 screen_manager.add_widget(PokemonFoodPicker(name = 'food_picker'))
 screen_manager.add_widget(game_over(name = 'game_over_screen'))
+screen_manager.add_widget(winning(name = 'winning_screen'))
 # screen_manager.add_widget(ScreenFour(name ="screen_four"))
 # screen_manager.add_widget(ScreenFive(name ="screen_five"))
-# screen_manager.current = 'game_over_screen'
+# screen_manager.current = 'winning_screen'
 
 # Create the App class
 # Create the App class

@@ -31,10 +31,23 @@
     BoxLayout:
     Button:
         text: 'Game Over'
-        font_size: 150
-        background_color : 240/255.0, 0/255.0, 0/255.0, 1
+        font_name: 'fonts/SuperMario256.ttf'
+        font_size: 100
+        background_color : 500/255.0, 0/255.0, 0/255.0, 1
         on_press:
             app.stop()
+
+
+<winning>:
+    BoxLayout:
+    Button:
+        text: 'YOU WON!'
+        font_name: 'fonts/Gemini Moon.otf'
+        font_size: 160
+        background_color : 0, 0, 10.0, 0.75
+        on_press:
+            app.stop()
+
 
 <SoccerBall>:
     size: 50, 50 
@@ -122,11 +135,17 @@
 <PokemonFoodPicker>:
     Label:
         text: 'Choose The right food'
+        font_name: 'fonts/Pokemon Hollow.ttf'
+        font_size: 60
         top: root.top - 5*(root.width/10)
     
     Label:
         text: str(root.food_choice)
+        font_name: 'fonts/Pokemon Hollow.ttf'
+        font_size: 40
         top: root.top - 7.5*(root.height/10)        
     
     Label:
         text: 'Your Score:'+ str(root.score)
+        font_name: 'fonts/Gemini Moon.otf'
+        font_size: 45
