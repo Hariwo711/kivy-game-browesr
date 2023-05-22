@@ -43,3 +43,14 @@ To run the soccer game, execute the `soccer.py` file:
 
 ```bash
 python soccer.py
+```
+To run the snake game, execute the snake.py file:
+```bash
+python snake.py
+```
+To run the Pokemon game, execute the pokemon.py file:
+```bash
+python pokemon.py
+```
+## Contributing
+Contributions to this project are welcome. Feel free to submit bug reports, feature requests, or pull requests.
