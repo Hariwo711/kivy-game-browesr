@@ -1,6 +1,6 @@
 # kivy-game-browesr
 KIVY WITH MULTIPLE GAMES TO CHOOSE
-![alt text]([http://url/to/img.png](https://github.com/Hariwo711/kivy-game-browesr/blob/main/Example%20Pics/Screenshot%202024-06-14%20at%2012.05.00.png?raw=true))
+![My PIC](Example Pics/Screenshot 2024-06-14 at 12.05.00.png)
 
 # Kivy Python Code
 
