@@ -14,6 +14,8 @@ The code requires the following dependencies to be installed:
 
 ## Soccer Game
 
+![alt text](http://url/to/img.png)
+
 The soccer game consists of the following components:
 
 - `Menu`: Represents the menu screen of the application.
@@ -31,11 +33,15 @@ The snake game consists of the following components:
 - `SnakeTail`: Represents a tail segment of the snake.
 - `SnakeGame`: Represents the snake game itself.
 
+![alt text](http://url/to/img.png)
+
 ## Pokemon Game
 
 The Pokemon game consists of the following component:
 
 - `PokemonFoodPicker`: Represents the screen where the player picks a type of food.
+
+![alt text](http://url/to/img.png)
 
 ## Usage
 
