@@ -4,7 +4,7 @@ KIVY WITH MULTIPLE GAMES TO CHOOSE
 
 
 # Kivy Python Code
-
+![alt text](Example_Pics/Screenshot%202024-06-14%20at%2012.09.50.png)
 This repository contains Python code that utilizes the Kivy framework for building user interfaces. It includes classes and functions for creating a soccer game and a snake game.
 
 ## Dependencies
