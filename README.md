@@ -1,5 +1,6 @@
 # kivy-game-browesr
 KIVY WITH MULTIPLE GAMES TO CHOOSE
+![My PIC](Example Pics/Screenshot 2024-06-14 at 12.05.00.png)
 
 # Kivy Python Code
 
@@ -13,6 +14,8 @@ The code requires the following dependencies to be installed:
 - `random`: A Python module for generating random numbers.
 
 ## Soccer Game
+
+![alt text]([[http://url/to/img.png](https://raw.githubusercontent.com/Hariwo711/kivy-game-browesr/main/Example%20Pics/Screenshot%202024-06-14%20at%2012.06.14.png))
 
 The soccer game consists of the following components:
 
@@ -31,11 +34,15 @@ The snake game consists of the following components:
 - `SnakeTail`: Represents a tail segment of the snake.
 - `SnakeGame`: Represents the snake game itself.
 
+![alt text]([http://url/to/img.png](https://github.com/Hariwo711/kivy-game-browesr/blob/main/Example%20Pics/Screenshot%202024-06-14%20at%2012.06.48.png?raw=true))
+
 ## Pokemon Game
 
 The Pokemon game consists of the following component:
 
 - `PokemonFoodPicker`: Represents the screen where the player picks a type of food.
+
+![alt text]([http://url/to/img.png](https://github.com/Hariwo711/kivy-game-browesr/blob/main/Example%20Pics/Screenshot%202024-06-14%20at%2012.09.30.png?raw=true))
 
 ## Usage
 
